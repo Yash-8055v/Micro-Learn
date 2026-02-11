@@ -1,0 +1,50 @@
+.topic-card {
+  cursor: pointer;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+  transition: all var(--transition-base);
+}
+
+.topic-card:hover {
+  transform: translateY(-4px);
+  box-shadow: var(--shadow-lg);
+}
+
+.topic-card-header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+.topic-card-icon {
+  font-size: 32px;
+}
+
+.topic-bookmark-btn {
+  font-size: 22px;
+  color: var(--text-muted);
+  transition: all var(--transition-fast);
+  background: none;
+  border: none;
+  cursor: pointer;
+  padding: var(--space-1);
+}
+
+.topic-bookmark-btn:hover {
+  transform: scale(1.2);
+}
+
+.topic-bookmark-btn.bookmarked {
+  color: var(--warning);
+}
+
+.topic-card-title {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--text-primary);
+}
+
+.topic-card-category {
+  align-self: flex-start;
+}

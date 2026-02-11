@@ -1,0 +1,115 @@
+/* Topic Learning Page Styles */
+
+.topic-learning {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.page-header {
+  margin-bottom: var(--space-2);
+}
+
+.page-title {
+  font-size: var(--font-size-3xl);
+  font-weight: 800;
+  margin: 0 0 var(--space-2);
+}
+
+.page-subtitle {
+  color: var(--text-muted);
+  font-size: var(--font-size-base);
+  margin: 0;
+}
+
+/* ---- Search Form ---- */
+.learn-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.learn-input-row {
+  display: flex;
+  gap: var(--space-3);
+}
+
+.learn-input {
+  flex: 1;
+}
+
+/* ---- Skeleton Loading ---- */
+.learn-skeleton {
+  padding: var(--space-6);
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+}
+
+/* ---- Result ---- */
+.learn-result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.result-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.result-topic {
+  font-size: var(--font-size-2xl);
+  font-weight: 800;
+  margin: 0 0 var(--space-2);
+}
+
+.bookmark-btn {
+  flex-shrink: 0;
+  font-size: var(--font-size-sm);
+}
+
+.bookmark-btn.bookmarked {
+  color: var(--warning);
+}
+
+.result-section {
+  padding: var(--space-6);
+}
+
+.result-section-title {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  margin: 0 0 var(--space-3);
+  color: var(--primary);
+}
+
+.result-content {
+  font-size: var(--font-size-sm);
+  line-height: 1.8;
+  color: var(--text-secondary);
+  margin: 0;
+}
+
+.result-content strong {
+  color: var(--text-primary);
+  font-weight: 700;
+}
+
+.micro-task {
+  background: color-mix(in srgb, var(--primary) 5%, var(--bg-card));
+  border-color: var(--primary-glow);
+  border-left: 4px solid var(--primary);
+}
+
+@media (max-width: 640px) {
+  .learn-input-row {
+    flex-direction: column;
+  }
+
+  .result-header {
+    flex-direction: column;
+  }
+}

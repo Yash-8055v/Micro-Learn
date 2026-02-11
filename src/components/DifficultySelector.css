@@ -1,0 +1,40 @@
+.difficulty-selector {
+  display: flex;
+  gap: var(--space-3);
+  flex-wrap: wrap;
+}
+
+.difficulty-btn {
+  display: flex;
+  align-items: center;
+  gap: var(--space-2);
+  padding: var(--space-3) var(--space-5);
+  border-radius: var(--radius-lg);
+  background: var(--bg-input);
+  color: var(--text-secondary);
+  font-weight: 600;
+  font-size: var(--font-size-sm);
+  border: 2px solid transparent;
+  transition: all var(--transition-base);
+  cursor: pointer;
+}
+
+.difficulty-btn:hover {
+  background: var(--bg-hover);
+  color: var(--text-primary);
+  transform: translateY(-1px);
+}
+
+.difficulty-btn.active {
+  background: color-mix(in srgb, var(--level-color) 12%, transparent);
+  color: var(--level-color);
+  border-color: var(--level-color);
+}
+
+.difficulty-emoji {
+  font-size: 18px;
+}
+
+.difficulty-label {
+  white-space: nowrap;
+}

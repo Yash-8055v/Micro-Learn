@@ -1,0 +1,90 @@
+/* Revision Sheet Page Styles */
+
+.revision-sheet {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-6);
+}
+
+.revision-form {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.revision-result {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.revision-header {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: var(--space-4);
+}
+
+.revision-notes {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+.revision-note-section {
+  padding: var(--space-5);
+  border-left: 4px solid var(--primary);
+}
+
+.note-heading {
+  font-size: var(--font-size-base);
+  font-weight: 700;
+  color: var(--primary);
+  margin: 0 0 var(--space-3);
+}
+
+.note-content {
+  font-size: var(--font-size-sm);
+  line-height: 1.8;
+  color: var(--text-secondary);
+}
+
+.revision-summary {
+  display: flex;
+  align-items: flex-start;
+  gap: var(--space-3);
+  background: color-mix(in srgb, var(--success) 5%, var(--bg-card));
+  border-left: 4px solid var(--success);
+  padding: var(--space-5);
+}
+
+.summary-icon {
+  font-size: 20px;
+  flex-shrink: 0;
+}
+
+.revision-summary p {
+  margin: 0;
+  font-size: var(--font-size-sm);
+  color: var(--text-secondary);
+  line-height: 1.6;
+}
+
+/* Print styles */
+@media print {
+  .revision-form,
+  .page-header,
+  .revision-header button {
+    display: none;
+  }
+
+  .revision-note-section {
+    break-inside: avoid;
+  }
+}
+
+@media (max-width: 640px) {
+  .revision-header {
+    flex-direction: column;
+  }
+}
