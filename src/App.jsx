@@ -17,13 +17,6 @@ import WeeklyPlan from './pages/WeeklyPlan';
 import Bookmarks from './pages/Bookmarks';
 import LearningHistory from './pages/LearningHistory';
 
-/**
- * App — Root component with Firebase Auth state management
- *
- * - Listens to Firebase auth state changes
- * - Protects dashboard routes (redirects to /login if not signed in)
- * - Theme (dark/light) persisted to localStorage
- */
 function App() {
   /* ---- Auth state ---- */
   const [user, setUser] = useState(null);

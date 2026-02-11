@@ -2,15 +2,6 @@ import React, { useState } from 'react';
 import { generateWeeklyPlan } from '../services/llmService';
 import './WeeklyPlan.css';
 
-/**
- * WeeklyPlan — AI-generated 7-day study plan
- *
- * WHERE LLM API CALL GOES:
- * - generateWeeklyPlan() in llmService.js
- *
- * WHERE FIRESTORE WRITES GO:
- * - Save generated plan to users/{uid}/weeklyPlans
- */
 function WeeklyPlan() {
   const [subjects, setSubjects] = useState('');
   const [plan, setPlan] = useState(null);
@@ -23,15 +14,10 @@ function WeeklyPlan() {
     setLoading(true);
     try {
       const subjectList = subjects.split(',').map((s) => s.trim()).filter(Boolean);
-      console.log('📅 Generating plan for:', subjectList);
       const data = await generateWeeklyPlan(subjectList);
-      console.log('📅 Plan data received:', data);
-      console.log('📅 Has plan array?', Array.isArray(data?.plan), 'Length:', data?.plan?.length);
-      console.log('📅 Has subjects?', Array.isArray(data?.subjects), 'Length:', data?.subjects?.length);
-      console.log('📅 Has tips?', Array.isArray(data?.tips), 'Length:', data?.tips?.length);
       setPlan(data);
-    } catch (err) {
-      console.error('Error generating plan:', err);
+    } catch {
+      // handled by llmService fallback
     }
     setLoading(false);
   };

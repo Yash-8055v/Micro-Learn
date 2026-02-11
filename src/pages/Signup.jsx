@@ -5,15 +5,6 @@ import { createUserWithEmailAndPassword, updateProfile } from 'firebase/auth';
 import ThemeToggle from '../components/ThemeToggle';
 import './Auth.css';
 
-/**
- * Signup — Firebase user registration
- *
- * After signup, creates user profile with displayName.
- * Firestore user doc can be created here too if needed:
- *   import { db } from '../firebase';
- *   import { doc, setDoc, serverTimestamp } from 'firebase/firestore';
- *   await setDoc(doc(db, 'users', cred.user.uid), { name, email, createdAt: serverTimestamp() });
- */
 function Signup({ theme, toggleTheme }) {
   const navigate = useNavigate();
   const [name, setName] = useState('');

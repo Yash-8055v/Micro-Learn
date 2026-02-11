@@ -4,13 +4,6 @@ import { getTopicExplanation } from '../services/llmService';
 import { saveBookmark, getBookmarks, removeBookmark, saveHistory } from '../services/firestoreService';
 import './TopicLearning.css';
 
-/**
- * TopicLearning — AI-powered topic explanation page
- *
- * All data from Firestore:
- * - saveHistory(): Write to users/{uid}/history
- * - saveBookmark()/removeBookmark(): Write to users/{uid}/bookmarks
- */
 function TopicLearning() {
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState('beginner');
@@ -24,8 +17,8 @@ function TopicLearning() {
       try {
         const data = await getBookmarks();
         setBookmarks(data);
-      } catch (err) {
-        console.error('Error loading bookmarks:', err);
+      } catch {
+        // handled gracefully
       }
     }
     loadBookmarks();
@@ -49,15 +42,15 @@ function TopicLearning() {
       const data = await getTopicExplanation(topic.trim(), difficulty);
       setResult(data);
 
-      // Save to Firestore history
+      // Save to history
       await saveHistory({
         id: Date.now().toString(),
         topic: topic.trim(),
         type: 'learning',
         difficulty,
       });
-    } catch (err) {
-      console.error('Error getting explanation:', err);
+    } catch {
+      // handled by service fallback
     }
     setLoading(false);
   };
@@ -73,8 +66,8 @@ function TopicLearning() {
         const saved = await saveBookmark({ id, topic: topic.trim(), difficulty });
         setBookmarks((prev) => [...prev, saved]);
       }
-    } catch (err) {
-      console.error('Bookmark error:', err);
+    } catch {
+      // handled gracefully
     }
   };
 

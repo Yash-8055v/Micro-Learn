@@ -5,19 +5,6 @@ import { saveHistory, saveProgress, getProgress, saveQuizAttempt } from '../serv
 import { adjustDifficulty, getScoreColor, getScoreEmoji } from '../utils/difficultyLogic';
 import './PracticeQuestions.css';
 
-/**
- * PracticeQuestions — AI-generated MCQs and short answer questions
- *
- * All data from Firestore:
- * - saveHistory(): Write quiz result to users/{uid}/history
- * - saveProgress(): Update users/{uid}/progress/stats
- * - saveQuizAttempt(): Write to users/{uid}/quizAttempts
- *
- * DIFFICULTY ADJUSTMENT LOGIC:
- * - After quiz submission, adjustDifficulty() evaluates the score
- * - If score >= 80%, difficulty increases
- * - If score <= 40%, difficulty decreases
- */
 function PracticeQuestions() {
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState('beginner');
@@ -41,8 +28,8 @@ function PracticeQuestions() {
     try {
       const data = await generateQuestions(topic.trim(), difficulty);
       setQuestions(data);
-    } catch (err) {
-      console.error('Error generating questions:', err);
+    } catch {
+      // handled by service fallback
     }
     setLoading(false);
   };
@@ -98,8 +85,8 @@ function PracticeQuestions() {
       await saveProgress({
         quizzesCompleted: (progress.quizzesCompleted || 0) + 1,
       });
-    } catch (err) {
-      console.error('Error saving quiz results:', err);
+    } catch {
+      // quiz results save failed silently
     }
   };
 

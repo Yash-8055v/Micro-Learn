@@ -1,11 +1,6 @@
 import React from 'react';
 import './DifficultySelector.css';
 
-/**
- * DifficultySelector — Beginner / Intermediate / Advanced toggle
- *
- * Used across Learning, Revision, and Practice pages.
- */
 const levels = [
   { key: 'beginner', label: 'Beginner', emoji: '🌱', color: 'var(--success)' },
   { key: 'intermediate', label: 'Intermediate', emoji: '🌿', color: 'var(--warning)' },

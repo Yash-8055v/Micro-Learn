@@ -2,13 +2,6 @@ import React from 'react';
 import { NavLink, useLocation } from 'react-router-dom';
 import './Sidebar.css';
 
-/**
- * Sidebar — Main navigation component
- *
- * Contains links to all app pages.
- * Collapses on mobile (controlled by isOpen prop).
- */
-
 const navItems = [
   { path: '/dashboard', icon: '📊', label: 'Dashboard' },
   { path: '/learn', icon: '📖', label: 'Learn Topic' },

@@ -7,12 +7,6 @@ import { sampleTopics, motivationalQuotes } from '../utils/mockData';
 import { getBookmarks, saveBookmark, removeBookmark, getHistory, getProgress } from '../services/firestoreService';
 import './Dashboard.css';
 
-/**
- * Dashboard — Main overview page
- *
- * All user data loaded from Firestore.
- * Stats are computed from real history entries.
- */
 function Dashboard() {
   const navigate = useNavigate();
   const [bookmarks, setBookmarks] = useState([]);
@@ -95,8 +89,8 @@ function Dashboard() {
           totalStudyTime: storedProgress.totalStudyTime || topicsStudied * 15,
           weeklyGoal,
         });
-      } catch (err) {
-        console.error('Error loading dashboard data:', err);
+      } catch {
+        // data load failed gracefully
       }
       setLoading(false);
     }
@@ -114,8 +108,8 @@ function Dashboard() {
         const saved = await saveBookmark({ id: topic.id, topic: topic.name, difficulty: 'beginner' });
         setBookmarks((prev) => [...prev, saved]);
       }
-    } catch (err) {
-      console.error('Bookmark error:', err);
+    } catch {
+      // bookmark action failed gracefully
     }
   };
 

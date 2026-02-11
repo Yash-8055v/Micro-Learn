@@ -5,9 +5,6 @@ import { signOut } from 'firebase/auth';
 import ThemeToggle from './ThemeToggle';
 import './Navbar.css';
 
-/**
- * Navbar — Top navigation bar with user info & logout
- */
 function Navbar({ theme, toggleTheme, onMenuToggle, user }) {
   const navigate = useNavigate();
 
@@ -23,8 +20,8 @@ function Navbar({ theme, toggleTheme, onMenuToggle, user }) {
     try {
       await signOut(auth);
       navigate('/login');
-    } catch (err) {
-      console.error('Logout error:', err);
+    } catch {
+      // logout failed
     }
   };
 

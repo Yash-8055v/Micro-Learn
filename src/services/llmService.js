@@ -1,35 +1,16 @@
-/**
- * ============================================
- * LLM Service — SparkLearn (Gemini 3 via @google/genai SDK)
- * ============================================
- *
- * Uses the official @google/genai SDK with Gemini 3 Flash Preview.
- * Auto-retries on 429 rate limit errors.
- * API key loaded from .env: VITE_LLM_API_KEY
- */
-
 import { GoogleGenAI } from "@google/genai";
 
 const GEMINI_API_KEY = import.meta.env.VITE_LLM_API_KEY;
-
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-
 const MODEL = "gemini-3-flash-preview";
 
-/**
- * Helper: wait for given milliseconds.
- */
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
 }
 
-/**
- * Helper: call Gemini API with retry on 429 rate limit errors.
- * Retries up to 3 times with exponential backoff (2s, 4s, 8s).
- */
 async function callGemini(prompt, maxTokens = 2048) {
   if (!GEMINI_API_KEY) {
-    throw new Error('VITE_LLM_API_KEY is not set in .env file');
+    throw new Error('API key is not configured');
   }
 
   const MAX_RETRIES = 3;
@@ -47,40 +28,26 @@ async function callGemini(prompt, maxTokens = 2048) {
 
       return response.text;
     } catch (err) {
-      // Handle 429 rate limit — retry with backoff
       if (err?.status === 429 || err?.message?.includes('429')) {
         if (attempt < MAX_RETRIES) {
-          const waitTime = Math.pow(2, attempt + 1) * 1000; // 2s, 4s, 8s
-          console.warn(`⏳ Rate limited (429). Retrying in ${waitTime / 1000}s... (attempt ${attempt + 1}/${MAX_RETRIES})`);
+          const waitTime = Math.pow(2, attempt + 1) * 1000;
           await delay(waitTime);
           continue;
         }
-        throw new Error('Rate limit exceeded (429). The free Gemini API has a limit of ~15 requests/minute. Please wait a moment and try again.');
+        throw new Error('Rate limit exceeded. Please wait a moment and try again.');
       }
 
-      if (attempt === MAX_RETRIES) {
-        throw err;
-      }
-
-      // For other errors, throw immediately
-      console.error('Gemini API error:', err);
+      if (attempt === MAX_RETRIES) throw err;
       throw new Error(`API error: ${err.message?.slice(0, 200)}`);
     }
   }
 }
 
-/**
- * Helper: parse JSON from Gemini response (strips markdown fences if present).
- */
 function parseJSON(raw) {
-  // Gemini sometimes wraps JSON in ```json ... ```
   const cleaned = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
   return JSON.parse(cleaned);
 }
 
-/**
- * Get a student-friendly explanation of a topic.
- */
 export async function getTopicExplanation(topic, difficulty = 'beginner') {
   const prompt = `You are a friendly, encouraging college tutor. Explain "${topic}" at the ${difficulty} level for a college student.
 
@@ -97,20 +64,16 @@ Only return valid JSON.`;
     const parsed = parseJSON(raw);
     return { topic, difficulty, ...parsed };
   } catch (err) {
-    console.error('getTopicExplanation error:', err);
     return {
       topic,
       difficulty,
-      explanation: `⚠️ **AI Error:** ${err.message}\n\nPlease check:\n• Your Gemini API key is correct in the .env file\n• The Generative Language API is enabled in your Google Cloud Console\n• Open browser DevTools (F12 → Console) for more details`,
-      example: 'Unable to generate — see error above.',
-      microTask: '📝 Check the browser console (F12) for detailed error logs.',
+      explanation: `Could not generate explanation. Please try again.\n\nError: ${err.message}`,
+      example: 'Unable to generate.',
+      microTask: 'Please try again in a moment.',
     };
   }
 }
 
-/**
- * Get concise revision notes for a topic.
- */
 export async function getRevisionNotes(topic, difficulty = 'beginner') {
   const prompt = `Create concise revision notes for "${topic}" at the ${difficulty} level for a college student.
 
@@ -131,8 +94,7 @@ Only return valid JSON.`;
     const raw = await callGemini(prompt);
     const parsed = parseJSON(raw);
     return { topic, difficulty, ...parsed };
-  } catch (err) {
-    console.error('getRevisionNotes error:', err);
+  } catch {
     return {
       topic,
       difficulty,
@@ -142,9 +104,6 @@ Only return valid JSON.`;
   }
 }
 
-/**
- * Generate MCQ practice questions.
- */
 export async function generateQuestions(topic, difficulty = 'beginner', count = 5) {
   const prompt = `Generate exactly ${count} multiple choice questions about "${topic}" at the ${difficulty} level for a college student.
 
@@ -167,8 +126,7 @@ Make questions progressively harder. Only return valid JSON.`;
     const raw = await callGemini(prompt);
     const parsed = parseJSON(raw);
     return { topic, difficulty, ...parsed };
-  } catch (err) {
-    console.error('generateQuestions error:', err);
+  } catch {
     return {
       topic,
       difficulty,
@@ -183,16 +141,12 @@ Make questions progressively harder. Only return valid JSON.`;
   }
 }
 
-/**
- * Answer a student doubt (chat-style).
- */
 export async function answerDoubt(question, topic = '', history = []) {
   const context = topic ? `The student is currently studying "${topic}". ` : '';
 
-  // Build conversation context from last few messages
   let conversationContext = '';
   if (history.length > 1) {
-    const recent = history.slice(-6); // last 6 messages for context
+    const recent = history.slice(-6);
     conversationContext = '\n\nPrevious conversation:\n' +
       recent.map((m) => `${m.isUser ? 'Student' : 'Tutor'}: ${m.text}`).join('\n') + '\n\n';
   }
@@ -209,15 +163,11 @@ Respond helpfully and clearly:
 
   try {
     return await callGemini(prompt);
-  } catch (err) {
-    console.error('answerDoubt error:', err);
-    return 'Oops! I had trouble processing that. Could you try rephrasing your question? 😅';
+  } catch {
+    return 'Something went wrong. Could you try rephrasing your question?';
   }
 }
 
-/**
- * Generate a 7-day weekly study plan.
- */
 export async function generateWeeklyPlan(subjects = [], difficulty = 'beginner') {
   const subjectList = subjects.join(', ');
   const prompt = `Create a detailed 7-day study plan for a college student studying: ${subjectList}.
@@ -247,12 +197,9 @@ Only return valid JSON.`;
 
   try {
     const raw = await callGemini(prompt, 8192);
-    console.log('Weekly plan raw response length:', raw?.length);
     const parsed = parseJSON(raw);
-    console.log('Weekly plan parsed keys:', Object.keys(parsed));
     return { ...parsed, difficulty };
-  } catch (err) {
-    console.error('generateWeeklyPlan error:', err);
+  } catch {
     return {
       subjects,
       difficulty,

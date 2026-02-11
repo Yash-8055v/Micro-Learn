@@ -1,12 +1,3 @@
-/**
- * ============================================
- * Firebase Configuration — SparkLearn
- * ============================================
- *
- * Initializes Firebase Auth, Firestore, and Analytics.
- * Credentials are loaded from .env file.
- */
-
 import { initializeApp } from 'firebase/app';
 import { getAuth, GoogleAuthProvider } from 'firebase/auth';
 import { getFirestore } from 'firebase/firestore';
@@ -22,19 +13,11 @@ const firebaseConfig = {
   measurementId: import.meta.env.VITE_FIREBASE_MEASUREMENT_ID,
 };
 
-// Initialize Firebase
 const app = initializeApp(firebaseConfig);
 
-// Firebase Auth
 export const auth = getAuth(app);
-
-// Google Auth Provider
 export const googleProvider = new GoogleAuthProvider();
-
-// Firestore Database
 export const db = getFirestore(app);
-
-// Analytics (optional)
 export const analytics = getAnalytics(app);
 
 export default app;

@@ -1,15 +1,6 @@
 import React from 'react';
 import './ProgressRing.css';
 
-/**
- * ProgressRing — Animated circular progress indicator.
- *
- * Used in Dashboard and Learning History for visual progress display.
- *
- * @param {number} progress - 0 to 100
- * @param {number} size - Diameter in pixels
- * @param {string} label - Text inside the ring
- */
 function ProgressRing({ progress = 0, size = 100, label = '' }) {
   const strokeWidth = 8;
   const radius = (size - strokeWidth) / 2;

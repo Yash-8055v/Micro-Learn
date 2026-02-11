@@ -3,13 +3,6 @@ import { getHistory, getProgress } from '../services/firestoreService';
 import ProgressRing from '../components/ProgressRing';
 import './LearningHistory.css';
 
-/**
- * LearningHistory — Shows studied topics, progress, and activity timeline
- *
- * All data loaded from Firestore:
- * - getHistory(): Read from users/{uid}/history
- * - getProgress(): Read from users/{uid}/progress/stats
- */
 function LearningHistory() {
   const [history, setHistory] = useState([]);
   const [stats, setStats] = useState({
@@ -76,8 +69,8 @@ function LearningHistory() {
           streak,
           weeklyGoal,
         });
-      } catch (err) {
-        console.error('Error loading history data:', err);
+      } catch {
+        // data load failed gracefully
       }
       setLoading(false);
     }

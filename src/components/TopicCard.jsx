@@ -1,11 +1,6 @@
 import React from 'react';
 import './TopicCard.css';
 
-/**
- * TopicCard — Displays a study topic with a bookmark toggle.
- *
- * Used on Dashboard and Bookmarks pages.
- */
 function TopicCard({ topic, isBookmarked, onBookmark, onClick }) {
   return (
     <div className="topic-card card" onClick={onClick}>

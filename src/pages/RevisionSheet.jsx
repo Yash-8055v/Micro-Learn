@@ -4,15 +4,6 @@ import { getRevisionNotes } from '../services/llmService';
 import { saveHistory } from '../services/firestoreService';
 import './RevisionSheet.css';
 
-/**
- * RevisionSheet — AI-generated concise revision notes
- *
- * WHERE LLM API CALL GOES:
- * - getRevisionNotes() in llmService.js
- *
- * WHERE FIRESTORE WRITES GO:
- * - Save revision session to history
- */
 function RevisionSheet() {
   const [topic, setTopic] = useState('');
   const [difficulty, setDifficulty] = useState('beginner');
@@ -33,8 +24,8 @@ function RevisionSheet() {
         type: 'revision',
         difficulty,
       });
-    } catch (err) {
-      console.error('Error generating revision notes:', err);
+    } catch {
+      // handled by service fallback
     }
     setLoading(false);
   };

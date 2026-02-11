@@ -5,9 +5,6 @@ import { signInWithEmailAndPassword, signInWithPopup } from 'firebase/auth';
 import ThemeToggle from '../components/ThemeToggle';
 import './Auth.css';
 
-/**
- * Login — Firebase Email/Password + Google sign-in
- */
 function Login({ theme, toggleTheme }) {
   const navigate = useNavigate();
   const [email, setEmail] = useState('');

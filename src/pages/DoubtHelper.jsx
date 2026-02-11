@@ -4,16 +4,6 @@ import { answerDoubt } from '../services/llmService';
 import { saveHistory } from '../services/firestoreService';
 import './DoubtHelper.css';
 
-/**
- * DoubtHelper — AI chatbot for clearing doubts
- *
- * WHERE LLM API CALL GOES:
- * - answerDoubt() in llmService.js
- * - Pass conversation history for context-aware responses
- *
- * WHERE FIRESTORE WRITES GO:
- * - Save doubt session to history
- */
 function DoubtHelper() {
   const [messages, setMessages] = useState([
     { text: "Hi! I'm your AI study buddy 🤖\n\nAsk me any doubt about your studies — I'll explain it in a simple, student-friendly way.\n\nYou can also set a topic context below for more relevant answers!", isUser: false },
@@ -39,7 +29,6 @@ function DoubtHelper() {
     setLoading(true);
 
     try {
-      // LLM API call happens here
       const response = await answerDoubt(userMessage, topicContext, messages);
       setMessages((prev) => [...prev, { text: response, isUser: false }]);
 

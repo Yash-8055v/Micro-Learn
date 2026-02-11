@@ -1,11 +1,6 @@
 import React from 'react';
 import './ChatMessage.css';
 
-/**
- * ChatMessage — Single chat bubble for the Doubt Helper
- *
- * Renders differently for user vs. AI messages.
- */
 function ChatMessage({ message, isUser }) {
   return (
     <div className={`chat-message ${isUser ? 'user' : 'ai'} animate-fade-in`}>

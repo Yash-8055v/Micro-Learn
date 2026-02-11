@@ -3,13 +3,6 @@ import { useNavigate } from 'react-router-dom';
 import { getBookmarks, removeBookmark } from '../services/firestoreService';
 import './Bookmarks.css';
 
-/**
- * Bookmarks — Saved topics for later revision
- *
- * All data from Firestore:
- * - getBookmarks(): Read from users/{uid}/bookmarks
- * - removeBookmark(): Delete from users/{uid}/bookmarks
- */
 function Bookmarks() {
   const navigate = useNavigate();
   const [bookmarks, setBookmarks] = useState([]);
@@ -21,8 +14,8 @@ function Bookmarks() {
       try {
         const data = await getBookmarks();
         setBookmarks(data);
-      } catch (err) {
-        console.error('Error loading bookmarks:', err);
+      } catch {
+        // load failed gracefully
       }
       setLoading(false);
     }
@@ -33,8 +26,8 @@ function Bookmarks() {
     try {
       await removeBookmark(id);
       setBookmarks((prev) => prev.filter((b) => b.id !== id));
-    } catch (err) {
-      console.error('Error removing bookmark:', err);
+    } catch {
+      // remove failed gracefully
     }
   };
 
