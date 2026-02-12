@@ -2,7 +2,7 @@
 
 SparkLearn is an intelligent study assistant that leverages **Google Gemini AI** to create personalized learning experiences. It helps students break down complex topics, generate revision notes, practice with AI-generated quizzes, and track their progress over time.
 
-Visit Live Website  : [SparkLearn](https://sparklearnbeta.vercel.app)
+Visit  Live  Website  : [SparkLearn](https://sparklearnbeta.vercel.app)
 
 ## 🚀 Key Features
 
