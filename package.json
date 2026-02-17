@@ -11,6 +11,7 @@
   "dependencies": {
     "@google/genai": "^1.40.0",
     "firebase": "^12.9.0",
+    "mermaid": "^11.12.3",
     "react": "^18.3.1",
     "react-dom": "^18.3.1",
     "react-router-dom": "^6.28.0"

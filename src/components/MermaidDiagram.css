@@ -1,0 +1,28 @@
+/* Mermaid Diagram Component Styles */
+
+.mermaid-diagram {
+  padding: var(--space-6);
+}
+
+.mermaid-diagram__canvas {
+  width: 100%;
+  overflow-x: auto;
+  text-align: center;
+}
+
+/* Make SVG responsive */
+.mermaid-diagram__canvas svg {
+  max-width: 100%;
+  height: auto;
+}
+
+.mermaid-diagram__message {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.mermaid-diagram__loading {
+  border-radius: var(--radius-md);
+  overflow: hidden;
+}

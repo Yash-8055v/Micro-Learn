@@ -2,6 +2,7 @@ import React, { useState, useEffect } from 'react';
 import DifficultySelector from '../components/DifficultySelector';
 import YouTubePlayer from '../components/YouTubePlayer';
 import NotesSection from '../components/NotesSection';
+import MermaidDiagram from '../components/MermaidDiagram';
 import { getTopicExplanation } from '../services/llmService';
 import { saveBookmark, getBookmarks, removeBookmark, saveHistory } from '../services/firestoreService';
 import './TopicLearning.css';
@@ -160,7 +161,10 @@ function TopicLearning() {
           {/* YouTube Video — rendered below the AI explanation sections */}
           <YouTubePlayer topic={topic} />
 
-          {/* Notes — rendered below the YouTube player */}
+          {/* Concept Diagram — AI-generated Mermaid diagram */}
+          <MermaidDiagram diagramText={result.mermaidDiagram} />
+
+          {/* Notes — rendered below the diagram */}
           <NotesSection topic={topic} />
         </div>
       )}

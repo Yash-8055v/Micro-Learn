@@ -55,7 +55,8 @@ Return your response as JSON with this exact structure (no markdown fences):
 {
   "explanation": "A clear, multi-paragraph explanation. Use **bold** for key terms. Include bullet points with • character for key points.",
   "example": "A relatable real-world analogy or example that a college student would understand.",
-  "microTask": "A specific, actionable 10-minute study task the student can do right now to reinforce this topic. Start with an emoji."
+  "microTask": "A specific, actionable 10-minute study task the student can do right now to reinforce this topic. Start with an emoji.",
+  "mermaidDiagram": "A valid Mermaid.js flowchart (graph TD) that visually maps the key concepts of this topic. Use short labels. Do NOT use parentheses or special characters inside node labels. Example format:\\ngraph TD\\n  A[Concept] --> B[Sub-concept]\\n  B --> C[Detail]"
 }
 Only return valid JSON.`;
 
@@ -70,6 +71,7 @@ Only return valid JSON.`;
       explanation: `Could not generate explanation. Please try again.\n\nError: ${err.message}`,
       example: 'Unable to generate.',
       microTask: 'Please try again in a moment.',
+      mermaidDiagram: '',
     };
   }
 }
