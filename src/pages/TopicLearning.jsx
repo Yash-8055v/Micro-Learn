@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import DifficultySelector from '../components/DifficultySelector';
+import YouTubePlayer from '../components/YouTubePlayer';
 import { getTopicExplanation } from '../services/llmService';
 import { saveBookmark, getBookmarks, removeBookmark, saveHistory } from '../services/firestoreService';
 import './TopicLearning.css';
@@ -154,6 +155,9 @@ function TopicLearning() {
               __html: result.microTask.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br />')
             }} />
           </div>
+
+          {/* YouTube Video — rendered below the AI explanation sections */}
+          <YouTubePlayer topic={topic} />
         </div>
       )}
     </div>
