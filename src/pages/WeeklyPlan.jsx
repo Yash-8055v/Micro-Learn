@@ -1,12 +1,17 @@
 import React, { useState } from 'react';
 import useLocalStorage from '../utils/useLocalStorage';
+import { auth } from '../firebase';
 import { generateWeeklyPlan } from '../services/llmService';
 import './WeeklyPlan.css';
 
 function WeeklyPlan() {
-  /* Persisted state — generated plan survives navigation (localStorage) */
-  const [subjects, setSubjects] = useLocalStorage('sparklearn_plan_subjects', '');
-  const [plan, setPlan] = useLocalStorage('sparklearn_plan_data', null);
+  /*
+   * Persisted state — generated plan survives navigation (localStorage).
+   * Keys are scoped by userId so each account has isolated data.
+   */
+  const userId = auth.currentUser?.uid;
+  const [subjects, setSubjects] = useLocalStorage('sparklearn_plan_subjects', userId, '');
+  const [plan, setPlan] = useLocalStorage('sparklearn_plan_data', userId, null);
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async (e) => {

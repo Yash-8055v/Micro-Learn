@@ -2,6 +2,7 @@ import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { auth } from '../firebase';
 import { signOut } from 'firebase/auth';
+import { clearUserStorage } from '../utils/storageUtils';
 import ThemeToggle from './ThemeToggle';
 import './Navbar.css';
 
@@ -18,6 +19,14 @@ function Navbar({ theme, toggleTheme, onMenuToggle, user }) {
 
   const handleLogout = async () => {
     try {
+      /*
+       * Clear this user's localStorage data BEFORE signing out.
+       * After signOut() the uid becomes null, so we capture it first.
+       * This prevents the next user from seeing stale data.
+       */
+      const uid = auth.currentUser?.uid;
+      if (uid) clearUserStorage(uid);
+
       await signOut(auth);
       navigate('/login');
     } catch {

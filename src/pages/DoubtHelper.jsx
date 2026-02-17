@@ -1,17 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react';
 import useLocalStorage from '../utils/useLocalStorage';
+import { auth } from '../firebase';
 import ChatMessage from '../components/ChatMessage';
 import { answerDoubt } from '../services/llmService';
 import { saveHistory } from '../services/firestoreService';
 import './DoubtHelper.css';
 
 function DoubtHelper() {
-  /* Persisted state — chat history survives navigation (localStorage) */
-  const [messages, setMessages] = useLocalStorage('sparklearn_doubt_messages', [
+  /*
+   * Persisted state — chat history survives navigation (localStorage).
+   * Keys are scoped by userId so each account has isolated data.
+   */
+  const userId = auth.currentUser?.uid;
+  const [messages, setMessages] = useLocalStorage('sparklearn_doubt_messages', userId, [
     { text: "Hi! I'm your AI study buddy 🤖\n\nAsk me any doubt about your studies — I'll explain it in a simple, student-friendly way.\n\nYou can also set a topic context below for more relevant answers!", isUser: false },
   ]);
   const [input, setInput] = useState('');
-  const [topicContext, setTopicContext] = useLocalStorage('sparklearn_doubt_context', '');
+  const [topicContext, setTopicContext] = useLocalStorage('sparklearn_doubt_context', userId, '');
   const [loading, setLoading] = useState(false);
   const messagesEndRef = useRef(null);
   const inputRef = useRef(null);

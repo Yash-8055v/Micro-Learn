@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useLocalStorage from '../utils/useLocalStorage';
+import { auth } from '../firebase';
 import DifficultySelector from '../components/DifficultySelector';
 import YouTubePlayer from '../components/YouTubePlayer';
 import NotesSection from '../components/NotesSection';
@@ -9,10 +10,14 @@ import { saveBookmark, getBookmarks, removeBookmark, saveHistory } from '../serv
 import './TopicLearning.css';
 
 function TopicLearning() {
-  /* Persisted state — survives navigation between sections (localStorage) */
-  const [topic, setTopic] = useLocalStorage('sparklearn_learn_topic', '');
-  const [difficulty, setDifficulty] = useLocalStorage('sparklearn_learn_difficulty', 'beginner');
-  const [result, setResult] = useLocalStorage('sparklearn_learn_result', null);
+  /*
+   * Persisted state — survives navigation between sections (localStorage).
+   * Keys are scoped by userId so each account has isolated data.
+   */
+  const userId = auth.currentUser?.uid;
+  const [topic, setTopic] = useLocalStorage('sparklearn_learn_topic', userId, '');
+  const [difficulty, setDifficulty] = useLocalStorage('sparklearn_learn_difficulty', userId, 'beginner');
+  const [result, setResult] = useLocalStorage('sparklearn_learn_result', userId, null);
   const [loading, setLoading] = useState(false);
   const [bookmarks, setBookmarks] = useState([]);
 

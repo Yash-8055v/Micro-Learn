@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import useLocalStorage from '../utils/useLocalStorage';
+import { auth } from '../firebase';
 import DifficultySelector from '../components/DifficultySelector';
 import { generateQuestions } from '../services/llmService';
 import { saveHistory, saveProgress, getProgress, saveQuizAttempt } from '../services/firestoreService';
@@ -7,14 +8,18 @@ import { adjustDifficulty, getScoreColor, getScoreEmoji } from '../utils/difficu
 import './PracticeQuestions.css';
 
 function PracticeQuestions() {
-  /* Persisted state — quiz session survives navigation (localStorage) */
-  const [topic, setTopic] = useLocalStorage('sparklearn_practice_topic', '');
-  const [difficulty, setDifficulty] = useLocalStorage('sparklearn_practice_difficulty', 'beginner');
-  const [questions, setQuestions] = useLocalStorage('sparklearn_practice_questions', null);
-  const [selectedAnswers, setSelectedAnswers] = useLocalStorage('sparklearn_practice_answers', {});
-  const [submitted, setSubmitted] = useLocalStorage('sparklearn_practice_submitted', false);
-  const [score, setScore] = useLocalStorage('sparklearn_practice_score', null);
-  const [difficultyResult, setDifficultyResult] = useLocalStorage('sparklearn_practice_diffResult', null);
+  /*
+   * Persisted state — quiz session survives navigation (localStorage).
+   * Keys are scoped by userId so each account has isolated data.
+   */
+  const userId = auth.currentUser?.uid;
+  const [topic, setTopic] = useLocalStorage('sparklearn_practice_topic', userId, '');
+  const [difficulty, setDifficulty] = useLocalStorage('sparklearn_practice_difficulty', userId, 'beginner');
+  const [questions, setQuestions] = useLocalStorage('sparklearn_practice_questions', userId, null);
+  const [selectedAnswers, setSelectedAnswers] = useLocalStorage('sparklearn_practice_answers', userId, {});
+  const [submitted, setSubmitted] = useLocalStorage('sparklearn_practice_submitted', userId, false);
+  const [score, setScore] = useLocalStorage('sparklearn_practice_score', userId, null);
+  const [difficultyResult, setDifficultyResult] = useLocalStorage('sparklearn_practice_diffResult', userId, null);
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async (e) => {

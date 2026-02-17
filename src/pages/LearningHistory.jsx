@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import useLocalStorage from '../utils/useLocalStorage';
+import { auth } from '../firebase';
 import { getHistory, getProgress } from '../services/firestoreService';
 import ProgressRing from '../components/ProgressRing';
 import './LearningHistory.css';
@@ -12,8 +13,9 @@ function LearningHistory() {
     streak: 0,
     weeklyGoal: 0,
   });
-  /* Persisted state — filter tab survives navigation (localStorage) */
-  const [filter, setFilter] = useLocalStorage('sparklearn_history_filter', 'all');
+  /* Persisted state — filter tab survives navigation (localStorage, user-scoped) */
+  const userId = auth.currentUser?.uid;
+  const [filter, setFilter] = useLocalStorage('sparklearn_history_filter', userId, 'all');
   const [loading, setLoading] = useState(true);
 
   useEffect(() => {
