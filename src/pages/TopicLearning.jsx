@@ -1,4 +1,5 @@
 import React, { useState, useEffect } from 'react';
+import useLocalStorage from '../utils/useLocalStorage';
 import DifficultySelector from '../components/DifficultySelector';
 import YouTubePlayer from '../components/YouTubePlayer';
 import NotesSection from '../components/NotesSection';
@@ -8,9 +9,10 @@ import { saveBookmark, getBookmarks, removeBookmark, saveHistory } from '../serv
 import './TopicLearning.css';
 
 function TopicLearning() {
-  const [topic, setTopic] = useState('');
-  const [difficulty, setDifficulty] = useState('beginner');
-  const [result, setResult] = useState(null);
+  /* Persisted state — survives navigation between sections (localStorage) */
+  const [topic, setTopic] = useLocalStorage('sparklearn_learn_topic', '');
+  const [difficulty, setDifficulty] = useLocalStorage('sparklearn_learn_difficulty', 'beginner');
+  const [result, setResult] = useLocalStorage('sparklearn_learn_result', null);
   const [loading, setLoading] = useState(false);
   const [bookmarks, setBookmarks] = useState([]);
 

@@ -1,13 +1,15 @@
 import React, { useState } from 'react';
+import useLocalStorage from '../utils/useLocalStorage';
 import DifficultySelector from '../components/DifficultySelector';
 import { getRevisionNotes } from '../services/llmService';
 import { saveHistory } from '../services/firestoreService';
 import './RevisionSheet.css';
 
 function RevisionSheet() {
-  const [topic, setTopic] = useState('');
-  const [difficulty, setDifficulty] = useState('beginner');
-  const [result, setResult] = useState(null);
+  /* Persisted state — revision notes survive navigation (localStorage) */
+  const [topic, setTopic] = useLocalStorage('sparklearn_revision_topic', '');
+  const [difficulty, setDifficulty] = useLocalStorage('sparklearn_revision_difficulty', 'beginner');
+  const [result, setResult] = useLocalStorage('sparklearn_revision_result', null);
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async (e) => {

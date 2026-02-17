@@ -1,10 +1,12 @@
 import React, { useState } from 'react';
+import useLocalStorage from '../utils/useLocalStorage';
 import { generateWeeklyPlan } from '../services/llmService';
 import './WeeklyPlan.css';
 
 function WeeklyPlan() {
-  const [subjects, setSubjects] = useState('');
-  const [plan, setPlan] = useState(null);
+  /* Persisted state — generated plan survives navigation (localStorage) */
+  const [subjects, setSubjects] = useLocalStorage('sparklearn_plan_subjects', '');
+  const [plan, setPlan] = useLocalStorage('sparklearn_plan_data', null);
   const [loading, setLoading] = useState(false);
 
   const handleGenerate = async (e) => {
