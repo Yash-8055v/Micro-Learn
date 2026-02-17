@@ -1,0 +1,107 @@
+/* Notes Section Component Styles */
+
+.notes-section {
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-4);
+}
+
+/* ---- Editor ---- */
+.notes-editor {
+  padding: var(--space-6);
+}
+
+.notes-textarea {
+  width: 100%;
+  min-height: 120px;
+  padding: var(--space-3) var(--space-4);
+  font-family: inherit;
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+  color: var(--text-primary);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+  resize: vertical;
+  transition: border-color 0.2s;
+}
+
+.notes-textarea:focus {
+  outline: none;
+  border-color: var(--primary);
+}
+
+.notes-actions {
+  display: flex;
+  align-items: center;
+  gap: var(--space-3);
+  margin-top: var(--space-3);
+}
+
+.notes-saved-time {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+/* ---- Previous Notes ---- */
+.notes-history {
+  padding: var(--space-6);
+}
+
+.notes-empty {
+  font-size: var(--font-size-sm);
+  color: var(--text-muted);
+  margin: 0;
+}
+
+.notes-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: var(--space-3);
+}
+
+.notes-card {
+  padding: var(--space-4);
+  background: var(--bg-secondary);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-md);
+}
+
+.notes-card__header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: var(--space-2);
+}
+
+.notes-card__topic {
+  font-size: var(--font-size-sm);
+  color: var(--primary);
+}
+
+.notes-card__time {
+  font-size: var(--font-size-xs);
+  color: var(--text-muted);
+}
+
+.notes-card__content {
+  font-size: var(--font-size-sm);
+  line-height: 1.7;
+  color: var(--text-secondary);
+  margin: 0 0 var(--space-2);
+  white-space: pre-wrap;
+  word-break: break-word;
+}
+
+.notes-card__delete {
+  font-size: var(--font-size-xs);
+  padding: var(--space-1) var(--space-2);
+}
+
+/* ---- Loading ---- */
+.notes-loading {
+  padding: var(--space-2) 0;
+}

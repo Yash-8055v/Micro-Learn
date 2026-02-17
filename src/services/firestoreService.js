@@ -124,3 +124,38 @@ export async function getProgress() {
     return { topicsStudied: 0, quizzesCompleted: 0, streak: 0, totalStudyTime: 0 };
   }
 }
+
+// Notes
+
+export async function saveNote(note) {
+  const uid = getUid();
+  if (!uid) throw new Error('User not logged in');
+
+  const noteData = {
+    ...note,
+    savedAt: new Date().toISOString(),
+  };
+
+  await setDoc(doc(db, `users/${uid}/notes`, note.id), noteData);
+  return noteData;
+}
+
+export async function getNotes() {
+  const uid = getUid();
+  if (!uid) return [];
+
+  try {
+    const snap = await getDocs(collection(db, `users/${uid}/notes`));
+    const notes = snap.docs.map((d) => ({ id: d.id, ...d.data() }));
+    notes.sort((a, b) => new Date(b.savedAt) - new Date(a.savedAt));
+    return notes;
+  } catch {
+    return [];
+  }
+}
+
+export async function deleteNote(noteId) {
+  const uid = getUid();
+  if (!uid) throw new Error('User not logged in');
+  await deleteDoc(doc(db, `users/${uid}/notes`, noteId));
+}
