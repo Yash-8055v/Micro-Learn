@@ -147,7 +147,7 @@ function TopicLearning() {
           <div className="result-section card-flat">
             <h3 className="result-section-title">💡 Explanation</h3>
             <div className="result-content" dangerouslySetInnerHTML={{
-              __html: result.explanation.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br />')
+              __html: (result.explanation || '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br />')
             }} />
           </div>
 
@@ -161,12 +161,12 @@ function TopicLearning() {
           <div className="result-section card-flat micro-task">
             <h3 className="result-section-title">📝 Today's Micro-Task</h3>
             <div className="result-content" dangerouslySetInnerHTML={{
-              __html: result.microTask.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br />')
+              __html: (result.microTask || '').replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>').replace(/\n/g, '<br />')
             }} />
           </div>
 
           {/* YouTube Video — rendered below the AI explanation sections */}
-          <YouTubePlayer topic={topic} />
+          <YouTubePlayer topic={result.topic} />
 
           {/* Concept Diagram — AI-generated Mermaid diagram */}
           <MermaidDiagram diagramText={result.mermaidDiagram} />

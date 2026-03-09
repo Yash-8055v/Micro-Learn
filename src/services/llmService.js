@@ -1,8 +1,11 @@
 import { GoogleGenAI } from "@google/genai";
 
 const GEMINI_API_KEY = import.meta.env.VITE_LLM_API_KEY;
+const GROQ_API_KEY = import.meta.env.VITE_GROQ_API_KEY;
+
 const ai = new GoogleGenAI({ apiKey: GEMINI_API_KEY });
-const MODEL = "gemini-3-flash-preview";
+const GEMINI_MODEL = "gemini-3-flash-preview";
+const GROQ_MODEL = "llama-3.3-70b-versatile";
 
 function delay(ms) {
   return new Promise((resolve) => setTimeout(resolve, ms));
@@ -18,7 +21,7 @@ async function callGemini(prompt, maxTokens = 2048) {
   for (let attempt = 0; attempt <= MAX_RETRIES; attempt++) {
     try {
       const response = await ai.models.generateContent({
-        model: MODEL,
+        model: GEMINI_MODEL,
         contents: prompt,
         config: {
           temperature: 0.7,
@@ -43,9 +46,70 @@ async function callGemini(prompt, maxTokens = 2048) {
   }
 }
 
+async function callGroq(prompt, maxTokens = 2048) {
+  if (!GROQ_API_KEY) {
+    throw new Error('Groq API key is not configured');
+  }
+
+  const response = await fetch('https://api.groq.com/openai/v1/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': `Bearer ${GROQ_API_KEY}`,
+    },
+    body: JSON.stringify({
+      model: GROQ_MODEL,
+      messages: [{ role: "user", content: prompt }],
+      temperature: 0.7,
+      max_tokens: maxTokens,
+      response_format: { type: "json_object" }
+    })
+  });
+
+  if (!response.ok) {
+    const errorData = await response.json().catch(() => ({}));
+    const status = response.status;
+    throw { status, message: errorData.error?.message || `Groq error: ${status}` };
+  }
+
+  const data = await response.json();
+  return data.choices[0].message.content;
+}
+
+async function callWithFallback(prompt, maxTokens = 2048) {
+  if (GROQ_API_KEY) {
+    try {
+      return await callGroq(prompt, maxTokens);
+    } catch (err) {
+      if (err?.status === 429 || err?.message?.includes('429')) {
+        console.warn('Groq rate limit exhausted, falling back to Gemini...');
+      } else {
+        console.error('Groq API error, falling back to Gemini:', err);
+      }
+      // fall through to Gemini
+    }
+  }
+  
+  return await callGemini(prompt, maxTokens);
+}
+
 function parseJSON(raw) {
-  const cleaned = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
-  return JSON.parse(cleaned);
+  let cleaned = raw.replace(/```json\s*/gi, '').replace(/```\s*/g, '').trim();
+  try {
+    return JSON.parse(cleaned);
+  } catch (err) {
+    // Attempt 2: Groq often returns valid JSON but with literal newlines inside string values.
+    // We can aggressively replace literal newlines with escaped newlines before parsing.
+    try {
+      // Replace all newlines with \\n, then parse.
+      // E.g. "Line 1\nLine 2" becomes "Line 1\\nLine 2"
+      let fixed = cleaned.replace(/\n/g, '\\n').replace(/\r/g, '\\r').replace(/\t/g, '\\t');
+      return JSON.parse(fixed);
+    } catch (fallbackErr) {
+      console.error('Failed to parse JSON even after aggressive escaping:', fallbackErr);
+      throw fallbackErr;
+    }
+  }
 }
 
 export async function getTopicExplanation(topic, difficulty = 'beginner') {
@@ -61,7 +125,7 @@ Return your response as JSON with this exact structure (no markdown fences):
 Only return valid JSON.`;
 
   try {
-    const raw = await callGemini(prompt);
+    const raw = await callWithFallback(prompt);
     const parsed = parseJSON(raw);
     return { topic, difficulty, ...parsed };
   } catch (err) {
@@ -93,7 +157,7 @@ Return JSON (no markdown fences):
 Only return valid JSON.`;
 
   try {
-    const raw = await callGemini(prompt);
+    const raw = await callWithFallback(prompt);
     const parsed = parseJSON(raw);
     return { topic, difficulty, ...parsed };
   } catch {
@@ -125,7 +189,7 @@ Return JSON (no markdown fences):
 Make questions progressively harder. Only return valid JSON.`;
 
   try {
-    const raw = await callGemini(prompt);
+    const raw = await callWithFallback(prompt);
     const parsed = parseJSON(raw);
     return { topic, difficulty, ...parsed };
   } catch {
@@ -164,7 +228,7 @@ Respond helpfully and clearly:
 - If the question is vague, ask a clarifying follow-up question`;
 
   try {
-    return await callGemini(prompt);
+    return await callWithFallback(prompt);
   } catch {
     return 'Something went wrong. Could you try rephrasing your question?';
   }
@@ -198,7 +262,7 @@ Rules:
 Only return valid JSON.`;
 
   try {
-    const raw = await callGemini(prompt, 8192);
+    const raw = await callWithFallback(prompt, 8192);
     const parsed = parseJSON(raw);
     return { ...parsed, difficulty };
   } catch {
